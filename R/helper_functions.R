@@ -118,7 +118,7 @@ download_papers <- function(DOIs, wait_pubmed = 2, wait_scihub = 10) {
 
   # If folder downloads does not exist, create it
   if (dir.exists("downloads") == FALSE) dir.create("downloads")
-  if (file.exists("scihub.py-master/scihubw/scihub.py") == FALSE) stop("'scihub.py' does not exist in the folder 'scihub.py-master/scihub/'. Get the last version from https://github.com/zaytoun/scihub.py")
+  if (file.exists("scihub.py-master/scihub/scihub.py") == FALSE) stop("'scihub.py' does not exist in the folder 'scihub.py-master/scihub/'. Get the last version from https://github.com/zaytoun/scihub.py")
   
   
   # Download single_DOI using PUBMED ------------------------------------------
