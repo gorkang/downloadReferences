@@ -135,16 +135,24 @@ download_papers <- function(DOIs, wait_pubmed = 2, wait_scihub = 10) {
     
   }
   
+  download_pubmed_safely = purrr::safely(download_pubmed)
+  # download_pubmed_safely(single_DOI)
+  
   # Try with PUBMED and if fails, try with scihub -----------------------------
   download_pubmed_or_sci <- function(single_DOI, wait_pubmed = 2, wait_scihub = 10) {
 
     cat(crayon::green("\nGetting", single_DOI, "\n"))  
 
     # Try to download using Pubmed
-    RESULT = download_pubmed(single_DOI = single_DOI)
+    # RESULT = download_pubmed(single_DOI = single_DOI)
+    
+    # single_DOI = list_identifiers$dois[5]
+    RESULT = download_pubmed_safely(single_DOI = single_DOI)
+    
     
     # If it does not work, use sci-hub
-    if (is.null(RESULT)) {
+    # if (is.null(RESULT)) {
+    if (!is.null(RESULT$error) | is.null(RESULT$result)) {
       # Using: https://github.com/zaytoun/scihub.py
       cat(crayon::yellow(paste0("Failed to download ", single_DOI, " using Pubmed. Will use sci-hub after ", wait_scihub, "s...\n")))
       Sys.sleep(wait_scihub) # Be kind to the internet overlords
