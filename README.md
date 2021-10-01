@@ -7,7 +7,17 @@ Here you can find a couple R functions to help download references from scientif
 
 ## How to use
 
-You will need to download the full repo for the functions to work. See some examples in `examples.R`.  
+You can install downloadReferences with `remotes::install_github("gorkang/downloadReferences")`
+
+Then, if you want to download all the references in the paper `10.1001/jamainternmed.2021.0269`, you can do:  
+
+```
+library(downloadReferences)
+list_identifiers = get_dois_from_paper(DOI = "10.1001/jamainternmed.2021.0269")
+download_papers(DOIs = list_identifiers$dois)
+```
+
+
 
 You may also need to install a few python packages. For example, on Ubuntu 18.04:
 
