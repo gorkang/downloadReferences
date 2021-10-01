@@ -9,6 +9,13 @@ Here you can find a couple R functions to help download references from scientif
 
 You will need to download the full repo for the functions to work. See some examples in `examples.R`.  
 
+You may also need to install a few python packages. For example, on Ubuntu 18.04:
+
+```
+sudo apt-get install python3-bs4
+sudo apt-get install python3-retrying
+```
+
 
 ## How it works  
 
@@ -19,13 +26,15 @@ With `download_papers()` we try to download the papers:
   - First, from `https://www.ncbi.nlm.nih.gov/pmc/`  
   
   - If that does not work, we use [scihub.py](https://github.com/zaytoun/scihub.py), a "Python API and command-line tool for Sci-Hub".
+  
+  - If sci-hub does not work, we are out of options, maybe try #ICanHazPDF (see: https://en.wikipedia.org/wiki/ICanHazPDF) :(
 
 
 ## Limitations
 
 The full html version of the paper (including references) needs to be accessible to you. Regardless, this will probably miss lots of references, won't work in some/most cases, and can get you IP sent to hell if you abuse it.   
 
-Remember to be kind, and patient (there is  a wait_x parameter in the functions to placate the internet gods).  
+Remember to be kind, and patient (there is a `wait_pubmed` & `wait_scihub` parameters in the functions with longish defaults to placate the internet gods).  
 
 
 
