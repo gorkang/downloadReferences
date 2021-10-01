@@ -128,7 +128,7 @@ download_papers <- function(DOIs, wait_pubmed = 2, wait_scihub = 10) {
     
     if ("pmcid" %in% names(IDs$records)) {
       Sys.sleep(wait_pubmed) # Be kind to the internet overlords
-      download.file(url = paste0("https://www.ncbi.nlm.nih.gov/pmc/articles/", IDs$records$pmcid , "/pdf/"), destfile = paste0("downloads/", gsub("[/\\(\\)]", "_", single_DOI), ".pdf"), quiet = TRUE)
+      suppressWarnings(download.file(url = paste0("https://www.ncbi.nlm.nih.gov/pmc/articles/", IDs$records$pmcid , "/pdf/"), destfile = paste0("downloads/", gsub("[/\\(\\)]", "_", single_DOI), ".pdf"), quiet = TRUE))
       # } else {
       #   message("PUBMED page not found")
     }
@@ -156,7 +156,16 @@ download_papers <- function(DOIs, wait_pubmed = 2, wait_scihub = 10) {
       # Using: https://github.com/zaytoun/scihub.py
       cat(crayon::yellow(paste0("Failed to download ", single_DOI, " using Pubmed. Will use sci-hub after ", wait_scihub, "s...\n")))
       Sys.sleep(wait_scihub) # Be kind to the internet overlords
-      system(paste0("python3 scihub.py-master/scihub/scihub.py -d '", single_DOI ,"' -o 'downloads/'")) # The script also accepts PMID or URL
+      # system(paste0("python3 scihub.py-master/scihub/scihub.py -d '", single_DOI ,"' -o 'downloads/'")) # The script also accepts PMID or URL
+      RESULT_scihub = processx::run(command = "python3", args = c("scihub.py-master/scihub/scihub.py", "-d", single_DOI, "-o",  "downloads/"))
+      
+      if (grepl("INFO:Sci-Hub:Failed to fetch pdf with identifier", RESULT_scihub$stderr)) {
+        cat(crayon::red("- ERROR retrieving ", single_DOI, "||"), crayon::silver("Maybe try #ICanHazPDF (see: https://en.wikipedia.org/wiki/ICanHazPDF)\n")) 
+      } else {
+        cat(crayon::silver("Downloaded", single_DOI, "using Sci-Hub\n"))
+      }
+      
+      
     } else {
       cat(crayon::silver("Downloaded", single_DOI, "using Pubmed\n"))
     }
