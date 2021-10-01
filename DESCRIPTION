@@ -1,0 +1,17 @@
+Package: downloadReferences
+Title: Download all references of a scientific paper
+Version: 0.0.0.9000
+Authors@R: c(person("Gorka", "Navarrete", email = "gorkang@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-7678-8656")))
+Maintainer: Gorka Navarrete <gorkang@gmail.com>
+Description: Download all references of a scientific paper.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Depends: R (>= 3.5.0)
+Imports: crayon,
+         dplyr,
+         processx
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
+URL: https://github.com/gorkang/downloadReferences
+BugReports: https://github.com/gorkang/downloadReferences/issues
