@@ -5,21 +5,17 @@ After finding an important scientific paper, downloading all its references is b
 Here you can find a couple R functions to help download references from scientific papers. Of course, this is just a coding exercise, not meant to be used unlawfully.  
 
 
-## How to use
+## How to install
 
 You can install downloadReferences with `remotes::install_github("gorkang/downloadReferences")`
 
-Then, if you want to download all the references in the paper `10.1001/jamainternmed.2021.0269`, you can do:  
+Depending on you system configuration, you may need to install [scihub.py](https://github.com/zaytoun/scihub.py)'s dependencies. Given a copy of the scihub.py script [downloaded: 2020-06-20] is included in the downloadReferences package, if you have [pip](https://pypi.org/project/pip/) (e.g. [Ubuntu]: `sudo apt install python-pip`), you can do:
 
 ```
-library(downloadReferences)
-list_identifiers = get_dois_from_paper(DOI = "10.1001/jamainternmed.2021.0269")
-download_papers(DOIs = list_identifiers$dois)
+system(paste0("pip install -r ", system.file(package = "downloadReferences"), "/scihub.py-master/requirements.txt"))
 ```
 
-
-
-You may also need to install a few python packages. For example, on Ubuntu 18.04:
+Alternatively, on Ubuntu 18.04 it may be enough with:
 
 ```
 sudo apt-get install python3-bs4
@@ -27,9 +23,25 @@ sudo apt-get install python3-retrying
 ```
 
 
+## How to use
+
+Imagine you want to download the references in the paper `10.1001/jamainternmed.2021.0269`.
+
+You can simply do:  
+
+```
+library(downloadReferences)
+list_identifiers = get_dois_from_paper(DOI = "10.1001/jamainternmed.2021.0269")
+download_papers(DOIs = list_identifiers$dois)
+```
+
+The function `get_dois_from_paper()` can be used with the DOI number `get_dois_from_paper(DOI = "10.1001/jamainternmed.2021.0269")`, the DOI website `get_dois_from_paper(HTML = "http://dx.doi.org/10.1001/jamainternmed.2021.0269")` or, sometimes, directly with the paper's website `get_dois_from_paper(HTML = "https://www.frontiersin.org/articles/10.3389/fpsyg.2015.01327/full")`.
+
+
+
 ## How it works  
 
-With `get_dois_from_paper()` we get DOIs and/or PUBMED ids from a paper. Right now the functions needs a link to the html version of the paper, or a DOI (we try to get to the html version with `http://dx.doi.org/`).    
+With `get_dois_from_paper()` we get DOIs and/or PUBMED ids from a paper. Right now the functions needs a link to the html version of the paper, or a DOI (we get to the html version with `http://dx.doi.org/`).    
 
 With `download_papers()` we try to download the papers:  
 
