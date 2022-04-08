@@ -35,6 +35,8 @@ list_identifiers = get_dois_from_paper(DOI = "10.1001/jamainternmed.2021.0269")
 download_papers(DOIs = list_identifiers$dois)
 ```
 
+The above will download all the available papers to a "downloads" folder (will create it if it does not exist. Use the `download_folder` if you prefer to set a specific folder for the downloaded papers).
+
 The function `get_dois_from_paper()` can be used with the DOI number `get_dois_from_paper(DOI = "10.1001/jamainternmed.2021.0269")`, the DOI website `get_dois_from_paper(HTML = "http://dx.doi.org/10.1001/jamainternmed.2021.0269")` or, sometimes, directly with the paper's website `get_dois_from_paper(HTML = "https://www.frontiersin.org/articles/10.3389/fpsyg.2015.01327/full")`.
 
 
@@ -51,6 +53,49 @@ With `download_papers()` we try to download the papers:
   
   - If sci-hub does not work, we are out of options, maybe try #ICanHazPDF (see: https://en.wikipedia.org/wiki/ICanHazPDF) :(
 
+
+## Failed downloads
+
+`download_papers()` will output a data frame showing the DOIs of the papers it tried to download, you can look for STATUS == "ERROR" to see the DOI's not downloaded.      
+
+```
+library(downloadReferences)
+library(dplyr)
+
+ALL_DOIs = c("10.1136/bmjopen-2015-008155", # OK pubmed
+             "10.1136/bmj.h4534", # NO pubmed, OK scihub
+             "10.1136/bmj.b946") # NO pubmed, NO scihub
+
+OUTPUT = download_papers(DOIs = ALL_DOIs)
+#> ℹ Trying to download 3 papers to downloads/
+#> ℹ 'downloads/' folder does not exist, creating...
+#> 
+#> Getting 10.1136/bmjopen-2015-008155
+#> x Failed to download 10.1136/bmjopen-2015-008155 using PubMed. Will try Sci-Hub after 10s...
+#> ✓ Downloaded 10.1136/bmjopen-2015-008155 using Sci-Hub
+#> 
+#> Getting 10.1136/bmj.h4534
+#> x Failed to download 10.1136/bmj.h4534 using PubMed. Will try Sci-Hub after 10s...
+#> ✓ Downloaded 10.1136/bmj.h4534 using Sci-Hub
+#> 
+#> Getting 10.1136/bmj.b946
+#> x Failed to download 10.1136/bmj.b946 using PubMed. Will try Sci-Hub after 10s...
+#> x ERROR retrieving 10.1136/bmj.b946 || Maybe try #ICanHazPDF (see: https://en.wikipedia.org/wiki/ICanHazPDF)
+#>
+OUTPUT
+#> # A tibble: 3 × 3
+#>   DOI                         METHOD  STATUS
+#>   <chr>                       <chr>   <chr> 
+#> 1 10.1136/bmjopen-2015-008155 Sci-Hub OK    
+#> 2 10.1136/bmj.h4534           Sci-Hub OK    
+#> 3 10.1136/bmj.b946            Sci-Hub ERROR
+#> 
+OUTPUT %>% filter(STATUS == "ERROR")
+#> # A tibble: 1 × 3
+#>   DOI              METHOD  STATUS
+#>   <chr>            <chr>   <chr> 
+#> 1 10.1136/bmj.b946 Sci-Hub ERROR
+```
 
 ## Limitations
 
