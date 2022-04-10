@@ -77,10 +77,10 @@ get_dois_from_paper <- function(HTML, DOI = "") {
 
     cat(crayon::silver("  Found", length(DOIs), "DOIS and", length(PUBMEDs), "PubMed ID's\n"))
 
-    final_list = list(dois = DOIs,
-                      pubmed = PUBMEDs)
+    DOIs = list(dois = DOIs,
+                pubmed = PUBMEDs)
 
-    return(final_list)
+    return(DOIs)
 }
 
 
@@ -151,23 +151,24 @@ download_papers <- function(DOIs, wait_pubmed = 2, wait_scihub = 10, download_fo
     # If it does not work, use Sci-Hub
     if (!is.null(RESULT$error) | is.null(RESULT$result)) {
       # Using: https://github.com/zaytoun/scihub.py
+      OUTPUT = tibble(DOI = single_DOI, PubMed = "ERROR", SciHub = NA_character_, STATUS = "ERROR")
       cli::cli_alert_danger("Failed to download {single_DOI} using PubMed. Will try Sci-Hub after {wait_scihub}s...\n")
       Sys.sleep(wait_scihub) # Be kind to the internet overlords
       # system(paste0("python3 scihub.py-master/scihub/scihub.py -d '", single_DOI ,"' -o 'downloads/'")) # The script also accepts PMID or URL
       RESULT_scihub = processx::run(command = "python3", args = c(paste0(system.file(package = "downloadReferences"), "/scihub.py-master/scihub/scihub.py"), "-d", single_DOI, "-o",  normalizePath(download_folder)))
 
       if (grepl("INFO:Sci-Hub:Failed to fetch pdf with identifier", RESULT_scihub$stderr)) {
-        OUTPUT = tibble(DOI = single_DOI, METHOD = "Sci-Hub", STATUS = "ERROR")
+        OUTPUT = tibble(DOI = single_DOI, PubMed = "ERROR", SciHub = "ERROR", STATUS = "ERROR")
         cli::cli_alert_danger("ERROR retrieving {single_DOI} || {crayon::silver('Maybe try #ICanHazPDF (see: https://en.wikipedia.org/wiki/ICanHazPDF)')}")
       } else {
-        OUTPUT = tibble(DOI = single_DOI, METHOD = "Sci-Hub", STATUS = "OK")
+        OUTPUT = tibble(DOI = single_DOI, PubMed = "ERROR", SciHub = "OK", STATUS = "OK")
         cli::cli_alert_success(crayon::silver("Downloaded", single_DOI, "using Sci-Hub"))
       }
 
 
     } else {
       cli::cli_alert_success(crayon::silver("Downloaded", single_DOI, "using PubMed"))
-      OUTPUT = tibble(DOI = single_DOI, METHOD = "PubMed", STATUS = "OK")
+      OUTPUT = tibble(DOI = single_DOI, PubMed = "OK", SciHub = NA_character_, STATUS = "OK")
     }
 
     return(OUTPUT)

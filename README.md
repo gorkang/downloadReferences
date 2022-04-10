@@ -83,18 +83,18 @@ OUTPUT = download_papers(DOIs = ALL_DOIs)
 #> x ERROR retrieving 10.1136/bmj.b946 || Maybe try #ICanHazPDF (see: https://en.wikipedia.org/wiki/ICanHazPDF)
 #>
 OUTPUT
-#> # A tibble: 3 × 3
-#>   DOI                         METHOD  STATUS
-#>   <chr>                       <chr>   <chr> 
-#> 1 10.1136/bmjopen-2015-008155 Sci-Hub OK    
-#> 2 10.1136/bmj.h4534           Sci-Hub OK    
-#> 3 10.1136/bmj.b946            Sci-Hub ERROR
+#> # A tibble: 3 × 4
+#>   DOI                         PubMed SciHub STATUS
+#>   <chr>                       <chr>  <chr>  <chr> 
+#> 1 10.1136/bmjopen-2015-008155 OK     NA     OK    
+#> 2 10.1136/bmj.h4534           ERROR  OK     OK    
+#> 3 10.1136/bmj.b946            ERROR  ERROR  ERROR 
 #> 
 OUTPUT %>% filter(STATUS == "ERROR")
-#> # A tibble: 1 × 3
-#>   DOI              METHOD  STATUS
-#>   <chr>            <chr>   <chr> 
-#> 1 10.1136/bmj.b946 Sci-Hub ERROR
+#> # A tibble: 1 × 4
+#>   DOI              PubMed SciHub STATUS
+#>   <chr>            <chr>  <chr>  <chr> 
+#> 1 10.1136/bmj.b946 ERROR  ERROR  ERROR 
 ```
 
 ## Limitations
